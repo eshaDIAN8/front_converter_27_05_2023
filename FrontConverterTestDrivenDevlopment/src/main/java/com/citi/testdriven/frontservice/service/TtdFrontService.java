@@ -15,10 +15,12 @@ public class TtdFrontService {
 	private String formula;
 		
 	
+	
 	public Double getResult(String formula,double value) {
 		
+		try {
 		
-        if(formula.charAt(0)=='*') {
+        if( formula.charAt(0)=='*') {
 				
 				formula = formula.replace("*", "");
 				 doubleValue = Double.parseDouble(formula);
@@ -33,7 +35,14 @@ public class TtdFrontService {
 				 convertedresult = value/doubleValue;
 				 System.out.println(" else converted result"+convertedresult);
 			}
+		
+		}catch(Exception e) {
+			System.out.println("exception in service::"+e);
 			
+		}
+		
+		
+		
 			return convertedresult;
 			
 		
