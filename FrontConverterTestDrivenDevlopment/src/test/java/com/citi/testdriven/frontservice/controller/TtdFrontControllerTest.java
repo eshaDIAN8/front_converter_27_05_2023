@@ -109,8 +109,10 @@ public class TtdFrontControllerTest {
 	    	String value = "5";
 	    	
 	    	String uri = "/converter/{fromUnit}/{toUnit}/{value}";
-	    	when(dao.getFormula(convertedUnit)).thenReturn("*1000");
-	    	when(service.getResult("*1000", 5)).thenReturn(5000.0);
+	    	
+	    	//when(dao.getFormula(convertedUnit)).thenReturn("*1000");
+	    	//when(service.getAfterProcessingResult("*1000",5)).thenReturn(5000.0);
+	    	when(service.getConvertedResult(convertedUnit, 5)).thenReturn(5000.0);
 	  
 	    	 
 		 MvcResult mvcResult =  (MvcResult) mockMvc
@@ -131,8 +133,8 @@ public class TtdFrontControllerTest {
 	    	String value = "5";
 	    	
 	    	String uri = "/converter/{fromUnit}/{toUnit}/{value}";
-	    	when(dao.getFormula(convertedUnit)).thenReturn("*1000");
-	    	when(service.getResult("*1000", 5)).thenReturn(5000.0);
+	    	//when(dao.getFormula(convertedUnit)).thenReturn("*1000");
+	    	when(service.getConvertedResult(convertedUnit, 5)).thenReturn(5000.0);
 	    	 
 		 MvcResult mvcResult =  (MvcResult) mockMvc
 			.perform(MockMvcRequestBuilders.get(uri,"km","meter","5"))

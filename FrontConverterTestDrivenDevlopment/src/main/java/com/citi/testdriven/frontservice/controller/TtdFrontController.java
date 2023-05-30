@@ -1,5 +1,6 @@
 package com.citi.testdriven.frontservice.controller;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -18,30 +19,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/converter")
-
 public class TtdFrontController {
 	
 	@Autowired
-	TtdFrontService service = new TtdFrontService();
+	TtdFrontService service ;
 	
-	
-	//@Qualifier("ttdFrontDaoImplStatic")
-	@Autowired
-	TtdFrontDao dao  ;
+
 	
 	
 	@GetMapping("/{fromUnit}/{toUnit}/{value}")
 	public ResponseEntity<String> getFormulaFromCrud(@PathVariable String fromUnit,
-			@PathVariable String toUnit,@PathVariable double value) throws JsonProcessingException {
+			@PathVariable String toUnit,@PathVariable double value) throws JsonProcessingException, JSONException {
 		
 		
 		String convertedUnit = fromUnit+"-"+toUnit;
 		
-		
-	String formula =  dao.getFormula(convertedUnit);
-	System.out.println("formula ::"+formula);
 	
-	Double convertedResult =  service.getResult(formula, value);
+	Double convertedResult =  service.getConvertedResult(convertedUnit,value);
 	System.out.println("inside front controller "+convertedResult);
 	
 	String convertedResult1 = String.valueOf(convertedResult);

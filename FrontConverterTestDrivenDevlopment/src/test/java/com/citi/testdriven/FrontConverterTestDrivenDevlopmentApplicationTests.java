@@ -16,8 +16,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -42,19 +45,24 @@ import com.citi.testdriven.frontservice.dao.TtdFrontDao;
 import com.citi.testdriven.frontservice.dao.TtdFrontDaoImplStatic;
 import com.citi.testdriven.frontservice.service.TtdFrontService;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles({"test"})
-@EnabledIf(value = "#{environment.getActiveProfiles()[0] == 'test'}", loadContext = true)
+//@WebMvcTest
+//@EnabledIf(value = "#{environment.getActiveProfiles()[0] == 'test'}", loadContext = true)
 class FrontConverterTestDrivenDevlopmentApplicationTests {
 
+	
+	@Value(value="${local.server.port}")
+	private int port; 
+	
 	@Autowired
 	TtdFrontDao dao;
   
     
-   // @Autowired
-    private TestRestTemplate testRestTemp = new TestRestTemplate();
+    @Autowired
+    private TestRestTemplate testRestTemp ;
 	
 	@Test
 	void contextLoads() {
@@ -70,72 +78,36 @@ class FrontConverterTestDrivenDevlopmentApplicationTests {
 	        	
 		    	String convertedUnit ="meter-cm";
 		    	
-		    	String uri = "http://localhost:8089/converter/meter/cm/5";
+		    	//String uri = "http://localhost:8089/converter/meter/cm/5";
 		    	
-		   	 
-		    	String formula = dao.getFormula(convertedUnit) ;  
-			    	System.out.println("formula::"+formula);
-		    	
-		    	 ResponseEntity<String> result=	testRestTemp.getForEntity(uri, String.class);
-		    	
-		    
-			    	
-		    	 System.out.println("result ::"+result.getBody()); 
+		 
+		    //	 ResponseEntity<String> result=	testRestTemp.getForEntity(uri, String.class);
+		    	 	
+		    	 String result = testRestTemp.getForObject("http://localhost:"+ port +
+		    			"/converter/meter/cm/5", String.class);
 		    	 
-		     				
-		    	 Assert.assertEquals(200,result.getStatusCodeValue());
+		    	// System.out.println("result ::"+result.getBody()); 		     				
+		    	Assert.assertEquals("500.0",result);
 		    	
+	        }
+		    	
+		    		      	
+}	        
 		    
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-				//ResponseEntity<String> responseCrud = new ResponseEntity("*100", HttpStatus.OK);
-				    	
-			//	String uri = "http://localhost:8089/converter/meter/cm/7";	
-				
-		   // ResponseEntity<String> result=	restTemplate.getForEntity(uri, String.class);
-		    	
-		        
+		  
 		    
-		    //Assert.assertEquals(200,responseEntity.getStatusCodeValue());
-			   
+		    	    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
 			
-		    		/* MvcResult mvcResult =  (MvcResult) mockMvc
- 				.perform(MockMvcRequestBuilders.get(uri,"meter","cm","5"))
- 				.andExpect(MockMvcResultMatchers.status().isOk())
- 				.andExpect(MockMvcResultMatchers.content().string("500.0")).andReturn();	
- 	*/		 
- 			// Assert.assertEquals("5000.0", mvcResult.getResponse().getContentAsString());
-
-		    
-		    }	    
-		    
-		    
-		    
-		    
-		    
-		    
-		    
-		    
-		    
-		    
-		    
-		    //  ResponseEntity<String> responseFront = new ResponseEntity("700",HttpStatus.OK);
-				
-			        /* MvcResult mvcResult =  (MvcResult) mockMvc
-						.perform(MockMvcRequestBuilders.get(frontUri,"meter","cm","7"))
-						.andExpect(MockMvcResultMatchers.status().isOk())
-						.andExpect(MockMvcResultMatchers.content().string("700.0")).andReturn();	
-					*/
-				
-			   /* System.out.println("mvcResult::"+mvcResult.getResponse().getContentAsString());		 
-			    Assert.assertEquals(HttpStatus.OK.value(),mvcResult.getResponse().getStatus());
-				*/
-		
 		 
 		    
 		
@@ -151,4 +123,3 @@ class FrontConverterTestDrivenDevlopmentApplicationTests {
 					String.class)).contains("Hello, World"); }
 }*/
 
-}
